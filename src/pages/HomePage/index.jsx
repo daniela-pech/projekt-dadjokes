@@ -3,9 +3,7 @@ import { useState, useEffect } from 'react';
 import { Joke } from '../../components/Joke/Joke';
 
 export const HomePage = () => {
-  const [like, setLike] = useState(0);
-  const [dislike, setDislike] = useState(0);
-  const [joke, setJoke] = useState('');
+  const [jokes, setJokes] = useState([]);
 
   useEffect(() => {
     const fetchJoke = async () => {
@@ -13,33 +11,24 @@ export const HomePage = () => {
         'https://raw.githubusercontent.com/Czechitas-podklady-WEB/daweb-test/deploy/jokes.json',
       );
       const responseData = await response.json();
-      setJoke(responseData[0]);
+      setJokes(responseData);
     };
 
     fetchJoke();
   }, []);
 
-  const handleClick = () => {
-    setLike(like + 1);
-  };
-
-  const handleClickDis = () => {
-    setDislike(dislike + 1);
-  };
-
   return (
     <div className="container">
-      {joke === null ? (
-        'Načítám vtip…'
-      ) : (
+      {jokes.map((joke) => (
         <Joke
+          key={joke.id}
           userAvatar={joke.avatar}
           userName={joke.name}
           text={joke.text}
           likes={joke.likes}
           dislikes={joke.dislikes}
         />
-      )}
+      ))}
     </div>
   );
 };
